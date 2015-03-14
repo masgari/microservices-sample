@@ -1,0 +1,4 @@
+
+rootProject.name = 'microservices-sample'
+
+include 'user-service', 'persistence-service', 'service-discovery', 'hazelcast-discovery', 'service-api', 'base-server', 'deploy'

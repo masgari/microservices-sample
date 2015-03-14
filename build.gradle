@@ -7,31 +7,22 @@
  * user guide available at http://gradle.org/docs/2.2/userguide/tutorial_java_projects.html
  */
 
- buildscript {
+buildscript {
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'io.ratpack:ratpack-gradle:0.9.14',
-                  'com.github.jengelman.gradle.plugins:shadow:1.2.1'
+                'com.github.jengelman.gradle.plugins:shadow:1.2.1'
     }
 }
 
- if (!JavaVersion.current().java8Compatible) {
-   throw new IllegalStateException("Must be built with Java 8 or higher")
- }
-
+if (!JavaVersion.current().java8Compatible) {
+    throw new IllegalStateException("Must be built with Java 8 or higher")
+}
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'findbugs'
-apply plugin: 'project-report'
-
-// In this section you declare where to find the dependencies of your project
-repositories {
-    maven { url 'http://clinker.netty.io/nexus/content/repositories/snapshots' }
-    jcenter()
-}
 
 idea {
     project {
@@ -47,11 +38,20 @@ idea {
     }
 }
 
+
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'findbugs'
+    apply plugin: 'project-report'
 
     version = '0.0.1'
     group = 'microservices.sample'
+
+    repositories {
+        maven { url 'http://clinker.netty.io/nexus/content/repositories/snapshots' }
+        jcenter()
+    }
 
     configurations {
         integrationTest {
@@ -77,11 +77,11 @@ subprojects {
             task.project.sourceSets*.java.srcDirs*.each { it.mkdirs() }
             task.project.sourceSets*.resources.srcDirs*.each { it.mkdirs() }
         }
-        def bf = new File(task.project.name, "${task.project.name}.gradle")
+        def bf = new File(task.project.name, 'build.gradle')
         if (!bf.exists()) {
             bf.createNewFile()
         }
-        def readme = new File(task.project.name, "README.md")
+        def readme = new File(task.project.name, 'README.md')
         if (!readme.exists()) {
             readme.createNewFile()
         }
@@ -115,5 +115,23 @@ subprojects {
         jvmArgs = ['-ea'] //required for ES tests
         testClassesDir = sourceSets.integrationTest.output.classesDir
         classpath = sourceSets.integrationTest.runtimeClasspath
+    }
+}
+
+configure(subprojects.findAll { it.name.endsWith('-service') }) {
+    apply plugin: "io.ratpack.ratpack-java"
+    apply plugin: "com.github.johnrengelman.shadow"
+
+    dependencies {
+        // SpringLoaded enables runtime hot reloading.
+        // It is not part of the app runtime and is not shipped in the distribution.
+        // springloaded "org.springframework:springloaded:1.2.1.RELEASE"
+
+        // This is a Guice ratpack app
+        compile ratpack.dependency("guice")
+        compile project(':base-server')
+        compile project(':service-api')
+        compile project(':service-discovery')
+        compile project(':hazelcast-discovery')
     }
 }
