@@ -133,5 +133,6 @@ configure(subprojects.findAll { it.name.endsWith('-service') }) {
         compile project(':service-api')
         compile project(':service-discovery')
         compile project(':hazelcast-discovery')
+        compile 'com.beust:jcommander:1.35'
     }
 }

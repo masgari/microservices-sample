@@ -2,7 +2,8 @@ description = "Provides base classes for creating REST servers"
 
 dependencies {
     compile 'com.google.guava:guava:18.0'
-    compile 'com.google.inject:guice:3.0'
+    compile 'io.ratpack:ratpack-guice:0.9.14'
     compile 'io.ratpack:ratpack-core:0.9.14'
+    compile 'com.google.code.gson:gson:2.3.1'
 
 }
