@@ -41,6 +41,7 @@ public class PersistenceServer extends BaseServer {
 
         try {
             PersistenceServer server = new PersistenceServer(params.getPort());
+            System.out.println("Listening on port:" + params.getPort());
             server.start();
         } catch (Exception e) {
             e.printStackTrace();

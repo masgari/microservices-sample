@@ -10,4 +10,6 @@ import java.util.function.Consumer;
  */
 public interface Store {
     <T> void saveAsync(T object, Consumer<IdResponse> onSuccessCallback, Consumer<Throwable> onErrorCallback);
+
+    void findById(String id, Consumer<Object> onSuccessCallback, Consumer<Throwable> onErrorCallback);
 }

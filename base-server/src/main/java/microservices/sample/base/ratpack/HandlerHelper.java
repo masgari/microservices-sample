@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import microservices.sample.InvalidValueException;
+import microservices.sample.ResourceNotFoundException;
 import ratpack.exec.Fulfiller;
 import ratpack.func.Action;
 import ratpack.handling.Context;
@@ -50,6 +51,8 @@ public class HandlerHelper {
         return throwable -> {
             if (throwable instanceof InvalidValueException) {
                 StatusHelper.sendBadRequest(context, throwable.getMessage());
+            } else if (throwable instanceof ResourceNotFoundException) {
+                StatusHelper.sendNotFound(context, ((ResourceNotFoundException) throwable).getId());
             } else {
                 StatusHelper.sendInternalError(context, throwable);
             }

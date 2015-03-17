@@ -31,10 +31,12 @@ public class HazelcastBuilder {
 
     public HazelcastInstance build() {
         Config config = new Config();
-        SetConfig setConfig = new SetConfig();
-        setConfig.setName(PUBLISHED_SERVICES);
-        setConfig.addItemListenerConfig(new ItemListenerConfig(listener, true));
-        config.addSetConfig(setConfig);
+        if (listener != null) {
+            SetConfig setConfig = new SetConfig();
+            setConfig.setName(PUBLISHED_SERVICES);
+            setConfig.addItemListenerConfig(new ItemListenerConfig(listener, true));
+            config.addSetConfig(setConfig);
+        }
         config.setInstanceName(UUID.randomUUID().toString());
 
         return Hazelcast.newHazelcastInstance(config);

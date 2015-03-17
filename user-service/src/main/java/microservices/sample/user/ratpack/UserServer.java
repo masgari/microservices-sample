@@ -39,6 +39,7 @@ public class UserServer extends BaseServer {
 
         try {
             UserServer server = new UserServer(params.getPort());
+            System.out.println("Listening on port:" + params.getPort());
             server.start();
         } catch (Exception e) {
             e.printStackTrace();
