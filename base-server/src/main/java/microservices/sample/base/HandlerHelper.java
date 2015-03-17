@@ -1,4 +1,4 @@
-package microservices.sample.server;
+package microservices.sample.base;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;

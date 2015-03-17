@@ -1,9 +1,9 @@
-package microservices.sample.server;
+package microservices.sample.base;
 
 import org.junit.Test;
 
-import static microservices.sample.server.NetUtils.MAX_PORT_NUMBER;
-import static microservices.sample.server.NetUtils.MIN_PORT_NUMBER;
+import static microservices.sample.base.NetUtils.MAX_PORT_NUMBER;
+import static microservices.sample.base.NetUtils.MIN_PORT_NUMBER;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 

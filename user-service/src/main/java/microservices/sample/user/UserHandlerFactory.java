@@ -1,5 +1,6 @@
-package microservices.sample.server;
+package microservices.sample.user;
 
+import microservices.sample.base.StatusHelper;
 import ratpack.func.Action;
 import ratpack.handling.Chain;
 import ratpack.handling.Context;

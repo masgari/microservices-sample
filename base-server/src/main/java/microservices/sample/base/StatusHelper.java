@@ -1,4 +1,4 @@
-package microservices.sample.server;
+package microservices.sample.base;
 
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;

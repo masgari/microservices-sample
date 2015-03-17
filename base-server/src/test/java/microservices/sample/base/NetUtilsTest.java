@@ -1,4 +1,4 @@
-package microservices.sample.server;
+package microservices.sample.base;
 
 import org.junit.Assert;
 import org.junit.Test;

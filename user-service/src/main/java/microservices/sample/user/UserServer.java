@@ -1,7 +1,10 @@
-package microservices.sample.server;
+package microservices.sample.user;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import microservices.sample.base.AvailablePortProvider;
+import microservices.sample.base.BaseServer;
+import microservices.sample.base.ServerException;
 import ratpack.server.ServerEnvironment;
 import ratpack.server.internal.DefaultServerConfigBuilder;
 

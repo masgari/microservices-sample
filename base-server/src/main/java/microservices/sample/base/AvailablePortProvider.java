@@ -1,5 +1,6 @@
-package microservices.sample.server;
+package microservices.sample.base;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 import java.util.Set;
@@ -7,8 +8,6 @@ import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static microservices.sample.server.NetUtils.MAX_PORT_NUMBER;
-import static microservices.sample.server.NetUtils.MIN_PORT_NUMBER;
 
 /**
  * @author mamad
@@ -20,8 +19,8 @@ public class AvailablePortProvider {
     private final Function<Integer, Boolean> portChecker;
 
     public AvailablePortProvider(int from, int to, Function<Integer, Boolean> portChecker) {
-        checkArgument(from >= MIN_PORT_NUMBER, "Min acceptable value for 'from':" + MIN_PORT_NUMBER);
-        checkArgument(to <= MAX_PORT_NUMBER, "Max acceptable value for 'to':" + MAX_PORT_NUMBER);
+        Preconditions.checkArgument(from >= NetUtils.MIN_PORT_NUMBER, "Min acceptable value for 'from':" + NetUtils.MIN_PORT_NUMBER);
+        Preconditions.checkArgument(to <= NetUtils.MAX_PORT_NUMBER, "Max acceptable value for 'to':" + NetUtils.MAX_PORT_NUMBER);
         checkArgument(to > from);
         this.from = from;
         this.to = to;

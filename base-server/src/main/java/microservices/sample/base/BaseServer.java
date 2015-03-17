@@ -1,4 +1,4 @@
-package microservices.sample.server;
+package microservices.sample.base;
 
 import ratpack.func.Action;
 import ratpack.guice.BindingsSpec;
