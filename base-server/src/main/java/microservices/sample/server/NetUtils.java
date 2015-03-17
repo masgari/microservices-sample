@@ -1,8 +1,12 @@
 package microservices.sample.server;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+
 import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
+import java.net.*;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * Network related utility methods
@@ -34,7 +38,7 @@ public final class NetUtils {
      * @return <tt>true</tt> if the port is available, or <tt>false</tt> if not
      * @throws IllegalArgumentException is thrown if the port number is out of range
      */
-    public static boolean available(int port) throws IllegalArgumentException {
+    public static boolean isAvailable(int port) throws IllegalArgumentException {
         if (port < MIN_PORT_NUMBER || port > MAX_PORT_NUMBER) {
             throw new IllegalArgumentException("Invalid start currentMinPort: " + port + ", must be between (" +
                     MIN_PORT_NUMBER + ", " + MAX_PORT_NUMBER + ")");
@@ -67,4 +71,31 @@ public final class NetUtils {
         return false;
     }
 
+    /**
+     * List ip (v4) addresses for running interfaces, ignore local ip addresses.
+     *
+     * @return map of network interface name to IPv4
+     */
+    public static Map<String, String> listIPs() throws SocketException {
+        Map<String, String> result = Maps.newHashMap();
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = interfaces.nextElement();
+            if (!networkInterface.isLoopback() && !networkInterface.isVirtual() && networkInterface.isUp()) {
+                Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                InetAddress address = null;
+                while (inetAddresses.hasMoreElements()) {
+                    InetAddress inetAddress = inetAddresses.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                        address = inetAddress;
+                        break;
+                    }
+                }
+                if (address != null) {
+                    result.put(networkInterface.getName(), address.getHostAddress());
+                }
+            }
+        }
+        return ImmutableMap.copyOf(result);
+    }
 }

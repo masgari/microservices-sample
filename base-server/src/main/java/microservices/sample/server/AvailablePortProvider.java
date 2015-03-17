@@ -29,7 +29,7 @@ public class AvailablePortProvider {
     }
 
     public static AvailablePortProvider between(int from, int to) {
-        return new AvailablePortProvider(from, to, NetUtils::available);
+        return new AvailablePortProvider(from, to, NetUtils::isAvailable);
     }
 
     public int nextPort() {

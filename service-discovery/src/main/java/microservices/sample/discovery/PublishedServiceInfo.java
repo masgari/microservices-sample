@@ -1,5 +1,6 @@
 package microservices.sample.discovery;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Objects;
  * @author mamad
  * @since 15/03/15.
  */
-public class PublishedServiceInfo<S> {
+public class PublishedServiceInfo<S> implements Serializable {
     private final String version;
     private final int port;
     private final String ip;
@@ -20,6 +21,10 @@ public class PublishedServiceInfo<S> {
         this.ip = ip;
         this.port = port;
         this.version = version;
+    }
+
+    public static <S> PublishedServiceInfo<S> of(Class<S> serviceClass, String ip, int port, String version) {
+        return new PublishedServiceInfo<>(serviceClass, ip, port, version);
     }
 
     public String getVersion() {
@@ -54,5 +59,10 @@ public class PublishedServiceInfo<S> {
     @Override
     public int hashCode() {
         return Objects.hash(this.ip, this.port);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("PublishedServiceInfo{version:%s, port:%d, ip:%s, serviceClass:%s}", version, port, ip, serviceClass);
     }
 }

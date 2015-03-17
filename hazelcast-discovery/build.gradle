@@ -2,4 +2,5 @@ description = "Service discovery based on hazelcast"
 
 dependencies {
     compile project(':service-discovery')
+    compile 'com.hazelcast:hazelcast:3.4.1'
 }
