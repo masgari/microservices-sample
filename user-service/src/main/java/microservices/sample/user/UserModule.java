@@ -1,8 +1,7 @@
 package microservices.sample.user;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
+import microservices.sample.user.ratpack.UserHandlerFactory;
 
 /**
  * @author mamad
@@ -11,6 +10,6 @@ import com.google.inject.AbstractModule;
 public class UserModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(Gson.class).toInstance(new GsonBuilder().create());
+        bind(UserHandlerFactory.class);
     }
 }

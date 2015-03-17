@@ -1,4 +1,4 @@
-package microservices.sample.base;
+package microservices.sample.base.ratpack;
 
 /**
  * @author mamad

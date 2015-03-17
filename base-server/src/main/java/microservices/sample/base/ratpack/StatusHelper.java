@@ -1,4 +1,4 @@
-package microservices.sample.base;
+package microservices.sample.base.ratpack;
 
 import com.google.common.base.Strings;
 import com.google.common.base.Throwables;

@@ -1,16 +1,11 @@
 package microservices.sample.discovery.hazelcast;
 
-import com.hazelcast.config.Config;
-import com.hazelcast.config.ItemListenerConfig;
-import com.hazelcast.config.SetConfig;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ISet;
-import com.hazelcast.core.ItemListener;
 import microservices.sample.discovery.PublishedServiceInfo;
 import microservices.sample.discovery.ServiceRegistry;
 
-import java.util.UUID;
+import static microservices.sample.discovery.hazelcast.HazelcastBuilder.PUBLISHED_SERVICES;
 
 /**
  * Simple Hazelcast-based implementation for ServiceDiscovery
@@ -19,26 +14,10 @@ import java.util.UUID;
  * @since 17/03/15.
  */
 public class HazelcastServiceRegistry implements ServiceRegistry {
-    public static final String PUBLISHED_SERVICES = "_published_services";
     private final HazelcastInstance hazelcastInstance;
 
-    private HazelcastServiceRegistry(ItemListener listener) {
-        Config config = new Config();
-        SetConfig setConfig = new SetConfig();
-        setConfig.setName(PUBLISHED_SERVICES);
-        setConfig.addItemListenerConfig(new ItemListenerConfig(listener, true));
-        config.addSetConfig(setConfig);
-        config.setInstanceName(UUID.randomUUID().toString());
-
-        config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
-        config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true).addMember("127.0.0.1");
-        config.getNetworkConfig().getInterfaces().setEnabled(true).addInterface("127.0.0.*");
-
-        hazelcastInstance = Hazelcast.newHazelcastInstance(config);
-    }
-
-    public static ServiceRegistry newInstance(ItemListener listener) {
-        return new HazelcastServiceRegistry(listener);
+    public HazelcastServiceRegistry(HazelcastInstance hazelcastInstance) {
+        this.hazelcastInstance = hazelcastInstance;
     }
 
     @Override

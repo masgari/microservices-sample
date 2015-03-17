@@ -1,4 +1,4 @@
-package microservices.sample.base;
+package microservices.sample.base.ratpack;
 
 import ratpack.func.Action;
 import ratpack.guice.BindingsSpec;
@@ -17,8 +17,7 @@ public class BaseServer {
     public BaseServer(Action<Chain> handlers, ServerConfig config, Action<BindingsSpec> binding) throws ServerException {
         try {
             this.ratpackServer = RatpackServer.of(def ->
-                    def
-                            .serverConfig(config)
+                    def.serverConfig(config)
                             .registry(Guice.registry(binding))
                             .handlers(handlers));
         } catch (Exception e) {

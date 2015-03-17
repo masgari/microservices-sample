@@ -1,6 +1,7 @@
 description = "Provides base classes for creating REST servers"
 
 dependencies {
+    compile project(':service-api')
     compile project(':service-discovery')
     compile project(':hazelcast-discovery')
     compile 'com.google.guava:guava:18.0'

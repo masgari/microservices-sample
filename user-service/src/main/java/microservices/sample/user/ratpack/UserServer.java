@@ -1,10 +1,12 @@
-package microservices.sample.user;
+package microservices.sample.user.ratpack;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import microservices.sample.base.AvailablePortProvider;
-import microservices.sample.base.BaseServer;
-import microservices.sample.base.ServerException;
+import microservices.sample.base.ratpack.BaseModule;
+import microservices.sample.base.ratpack.BaseServer;
+import microservices.sample.base.ratpack.ServerException;
+import microservices.sample.user.UserModule;
 import ratpack.server.ServerEnvironment;
 import ratpack.server.internal.DefaultServerConfigBuilder;
 
@@ -15,10 +17,10 @@ import ratpack.server.internal.DefaultServerConfigBuilder;
 public class UserServer extends BaseServer {
 
     public UserServer(int port) throws ServerException {
-        super(chain -> chain.prefix("v1", new UserHandlerFactory()).handler(ctx -> ctx.render("Users Service - version 1.0")),
-                DefaultServerConfigBuilder
-                        .noBaseDir(ServerEnvironment.env()).port(port).build(),
-                spec -> spec.add(new UserModule()));
+        super(chain -> chain.prefix("v1", UserHandlerFactory.class)
+                        .handler(ctx -> ctx.render("Users Service - version 1.0")),
+                DefaultServerConfigBuilder.noBaseDir(ServerEnvironment.env()).port(port).build(),
+                spec -> spec.add(new BaseModule()).add(new UserModule()));
     }
 
     public static void main(String[] args) {

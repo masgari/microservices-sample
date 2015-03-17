@@ -1,5 +1,6 @@
 package microservices.sample.discovery.hazelcast;
 
+import com.hazelcast.core.HazelcastInstance;
 import microservices.sample.discovery.*;
 import org.junit.After;
 import org.junit.Before;
@@ -28,8 +29,11 @@ public class HazelcastServiceRegistryTest {
 
     @Before
     public void setUp() throws Exception {
-        registry1 = HazelcastServiceRegistry.newInstance(new PublishServiceListener(serviceDiscovery));
-        registry2 = HazelcastServiceRegistry.newInstance(new PublishServiceListener(serviceDiscovery));
+        HazelcastInstance instance1 = HazelcastBuilder.create().withListener(new PublishServiceListener(serviceDiscovery)).build();
+        registry1 = new HazelcastServiceRegistry(instance1);
+
+        HazelcastInstance instance2 = HazelcastBuilder.create().withListener(new PublishServiceListener(serviceDiscovery)).build();
+        registry2 = new HazelcastServiceRegistry(instance2);
     }
 
     @After
