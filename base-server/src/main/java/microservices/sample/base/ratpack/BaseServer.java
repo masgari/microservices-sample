@@ -11,7 +11,7 @@ import ratpack.server.ServerConfig;
  * @author mamad
  * @since 15/03/15.
  */
-public class BaseServer {
+public abstract class BaseServer {
     private final RatpackServer ratpackServer;
 
     public BaseServer(Action<Chain> handlers, ServerConfig config, Action<BindingsSpec> binding) throws ServerException {
