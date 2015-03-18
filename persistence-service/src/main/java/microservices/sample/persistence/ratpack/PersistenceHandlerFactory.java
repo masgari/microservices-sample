@@ -20,7 +20,7 @@ public class PersistenceHandlerFactory implements Action<Chain> {
 
     @Override
     public void execute(Chain chain) throws Exception {
-        chain.prefix(EntitiesChainHandler.COLLECTION_NAME, chain.getRegistry().get(EntitiesChainHandler.class))
+        chain.prefix(EntitiesCollectionHandler.COLLECTION_NAME, chain.getRegistry().get(EntitiesCollectionHandler.class))
                 //default handler, show REST endpoints
                 .handler(ctx -> ctx.render("Persistence Service:\nSave: POST /v1/entities\nGet by id: GET /v1/entities/:id"));
     }

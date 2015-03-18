@@ -3,6 +3,7 @@ package microservices.sample.persistence.ratpack;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import microservices.sample.base.AvailablePortProvider;
+import microservices.sample.base.NetUtils;
 import microservices.sample.base.ratpack.BaseModule;
 import microservices.sample.base.ratpack.BaseServer;
 import microservices.sample.base.ratpack.ServerException;
@@ -10,19 +11,24 @@ import microservices.sample.persistence.PersistenceModule;
 import ratpack.server.ServerEnvironment;
 import ratpack.server.internal.DefaultServerConfigBuilder;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * @author mamad
  * @since 17/03/15.
  */
 public class PersistenceServer extends BaseServer {
 
-    public PersistenceServer(int port) throws ServerException {
-        super(chain -> chain.prefix("v1", PersistenceHandlerFactory.class)
-                        .handler(ctx -> ctx.render("Persistence Service - version 1.0")),
+    public static final String VERSION = "v1";
+
+    public PersistenceServer(int port, String ip) throws ServerException, UnknownHostException {
+        super(chain -> chain.prefix(VERSION, PersistenceHandlerFactory.class)
+                        .handler(ctx -> ctx.render("Persistence Service - " + VERSION)),
                 //create ratpack config
-                DefaultServerConfigBuilder.noBaseDir(ServerEnvironment.env()).port(port).build(),
+                DefaultServerConfigBuilder.noBaseDir(ServerEnvironment.env()).port(port).address(InetAddress.getByName(ip)).build(),
                 //add Guice modules
-                spec -> spec.add(new BaseModule()).add(new PersistenceModule()));
+                spec -> spec.add(new BaseModule()).add(new PersistenceModule(ip, port, VERSION)));
     }
 
     public static void main(String[] args) {
@@ -40,7 +46,7 @@ public class PersistenceServer extends BaseServer {
         }
 
         try {
-            PersistenceServer server = new PersistenceServer(params.getPort());
+            PersistenceServer server = new PersistenceServer(params.getPort(), params.getIp());
             System.out.println("Listening on port:" + params.getPort());
             server.start();
         } catch (Exception e) {
@@ -59,12 +65,19 @@ public class PersistenceServer extends BaseServer {
                 "range [" + MIN_PORT + "," + MAX_PORT + "]")
         private int port = AvailablePortProvider.between(MIN_PORT, MAX_PORT).nextPort();
 
+        @Parameter(names = {"-i", "--ip"}, description = "Listen ip address")
+        private String ip = NetUtils.guessIPAddress();
+
         public boolean isHelp() {
             return help;
         }
 
         public int getPort() {
             return port;
+        }
+
+        public String getIp() {
+            return ip;
         }
     }
 }

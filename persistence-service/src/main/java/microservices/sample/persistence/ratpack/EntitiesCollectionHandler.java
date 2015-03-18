@@ -3,7 +3,8 @@ package microservices.sample.persistence.ratpack;
 import com.google.inject.Inject;
 import microservices.sample.base.ratpack.HandlerHelper;
 import microservices.sample.base.ratpack.StatusHelper;
-import microservices.sample.persistence.Store;
+import microservices.sample.persistence.EntityStore;
+import microservices.sample.user.User;
 import ratpack.exec.Fulfiller;
 import ratpack.func.Action;
 import ratpack.handling.Chain;
@@ -15,15 +16,15 @@ import ratpack.handling.Context;
  * @author mamad
  * @since 17/03/15.
  */
-public class EntitiesChainHandler implements Action<Chain> {
+public class EntitiesCollectionHandler implements Action<Chain> {
     //rest collection name
     public static final String COLLECTION_NAME = "entities";
 
     private final HandlerHelper helper;
-    private final Store store;
+    private final EntityStore store;
 
     @Inject
-    public EntitiesChainHandler(HandlerHelper helper, Store store) {
+    public EntitiesCollectionHandler(HandlerHelper helper, EntityStore store) {
         this.helper = helper;
         this.store = store;
     }
@@ -42,14 +43,11 @@ public class EntitiesChainHandler implements Action<Chain> {
 
     private void handleSaveAsync(Context context) {
         Action<Fulfiller<String>> action = fulfiller -> {
-            Object entity = helper.fromBody(context, Object.class);
+            //at the moment, we only handle user entity type
+            User entity = helper.fromBody(context, User.class);
             store.saveAsync(entity, helper.newJsonConsumer(fulfiller), fulfiller::error);
         };
-        handleRequestWithPromise(context, action);
-    }
-
-    private void handleRequestWithPromise(Context context, Action<Fulfiller<String>> action) {
-        context.promise(action).onError(HandlerHelper.newErrorAction(context)).then(HandlerHelper.newJsonAction(context));
+        HandlerHelper.handleRequestWithPromise(context, action);
     }
 
     private void handleGetListAsync(Context context) {
@@ -61,7 +59,6 @@ public class EntitiesChainHandler implements Action<Chain> {
             String id = context.getPathTokens().get("id");
             store.findById(id, helper.newJsonConsumer(fulfiller), fulfiller::error);
         };
-        handleRequestWithPromise(context, action);
+        HandlerHelper.handleRequestWithPromise(context, action);
     }
-
 }

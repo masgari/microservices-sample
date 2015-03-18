@@ -33,6 +33,10 @@ public class BaseServer {
         }
     }
 
+    public boolean isRunning() {
+        return ratpackServer.isRunning();
+    }
+
     public void stop() throws ServerException {
         try {
             ratpackServer.stop();

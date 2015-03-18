@@ -2,6 +2,8 @@ package microservices.sample.base;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.*;
@@ -27,6 +29,7 @@ public final class NetUtils {
      * The maximum server currentMinPort number.
      */
     public static final int MAX_PORT_NUMBER = 49151;
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetUtils.class);
 
     private NetUtils() {
     }
@@ -97,5 +100,21 @@ public final class NetUtils {
             }
         }
         return ImmutableMap.copyOf(result);
+    }
+
+    public static String guessIPAddress() {
+        try {
+            Map<String, String> localIPs = listIPs();
+            for (Map.Entry<String, String> entry : localIPs.entrySet()) {
+                String iface = entry.getKey().toLowerCase();
+                if (iface.contains("eth") || iface.contains("wlan")) {
+                    return entry.getValue();
+                }
+            }
+            return "localhost";
+        } catch (SocketException e) {
+            LOGGER.error("Error in listing ip addresses", e);
+            return "localhost";
+        }
     }
 }

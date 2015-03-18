@@ -59,6 +59,11 @@ public class HandlerHelper {
         };
     }
 
+    public static void handleRequestWithPromise(Context context, Action<Fulfiller<String>> action) {
+        context.promise(action).onError(HandlerHelper.newErrorAction(context)).then(HandlerHelper.newJsonAction(context));
+    }
+
+
     public <T> T fromBody(Context context, Class<T> typeClass) {
         TypedData requestBody = context.getRequest().getBody();
         T requestObject = gson.fromJson(requestBody.getText(), typeClass);

@@ -2,8 +2,10 @@ package microservices.sample.persistence;
 
 import com.google.inject.AbstractModule;
 import com.hazelcast.core.HazelcastInstance;
+import microservices.sample.discovery.ServiceRegistry;
 import microservices.sample.discovery.hazelcast.HazelcastBuilder;
-import microservices.sample.persistence.ratpack.EntitiesChainHandler;
+import microservices.sample.discovery.hazelcast.HazelcastServiceRegistry;
+import microservices.sample.persistence.ratpack.EntitiesCollectionHandler;
 import microservices.sample.persistence.ratpack.PersistenceHandlerFactory;
 
 /**
@@ -11,14 +13,34 @@ import microservices.sample.persistence.ratpack.PersistenceHandlerFactory;
  * @since 17/03/15.
  */
 public class PersistenceModule extends AbstractModule {
+    private final String ipAddress;
+    private final int port;
+    private final String version;
+
+    public PersistenceModule(String ipAddress, int port, String version) {
+        this.ipAddress = ipAddress;
+        this.port = port;
+        this.version = version;
+    }
+
     @Override
     protected void configure() {
         //ratpack handlers
         bind(PersistenceHandlerFactory.class);
-        bind(EntitiesChainHandler.class);
+        bind(EntitiesCollectionHandler.class);
 
         bind(IdGenerator.class).to(UUIDGenerator.class);
-        bind(HazelcastInstance.class).toInstance(HazelcastBuilder.create().build());
-        bind(Store.class).to(HazelcastStore.class);
+
+        HazelcastInstance hazelcastInstance = HazelcastBuilder.create().build();
+
+        ServiceRegistry serviceRegistry = new HazelcastServiceRegistry(hazelcastInstance);
+        bind(ServiceRegistry.class).toInstance(serviceRegistry);
+
+        bind(HazelcastInstance.class).toInstance(hazelcastInstance);
+        bind(EntityStore.class).to(HazelcastEntityStore.class);
+
+        ServiceRegistrar serviceRegistrar = new ServiceRegistrar(ipAddress, port, serviceRegistry, version);
+        //now publish service into into registry
+        serviceRegistrar.register();
     }
 }

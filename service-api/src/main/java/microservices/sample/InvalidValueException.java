@@ -7,4 +7,10 @@ package microservices.sample;
  * @since 17/03/15.
  */
 public class InvalidValueException extends Exception {
+    public InvalidValueException() {
+    }
+
+    public InvalidValueException(String message) {
+        super(message);
+    }
 }

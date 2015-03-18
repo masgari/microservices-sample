@@ -1,9 +1,7 @@
 package microservices.sample.user;
 
-import retrofit.http.Body;
-import retrofit.http.POST;
-import retrofit.http.Path;
-import retrofit.http.Query;
+import microservices.sample.IdResponse;
+import retrofit.http.*;
 
 import java.util.List;
 
@@ -13,7 +11,7 @@ import java.util.List;
  */
 public interface UserService {
     @POST("/v1/users")
-    String addUser(@Body User user);
+    IdResponse addUser(@Body User user);
 
     /**
      * Connect user1 to user2
@@ -22,7 +20,8 @@ public interface UserService {
      * @return connection id
      */
     @POST("/v1/users/{id}/connect")
-    String connect(@Path("id") String id, @Query("to") String to);
+    IdResponse connect(@Path("id") String id, @Query("to") String to);
 
-    List<User> listDirectConnection(String name, int startIndex, int size);
+    @GET("/v1/users/{id}/connections")
+    List<User> listDirectConnection(@Path("id") String id);
 }
