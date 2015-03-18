@@ -43,7 +43,7 @@ java -jar persistence-service-0.0.1-all.jar
 ```
 Note:
 
-* Persistence-service must be run *after* user-service to be discovered automatically.
+* `persistence-service` must be run *after* `user-service` to be discovered automatically.
 
 Create first user:
 ```bash
@@ -59,7 +59,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"name": "user2"}' http://l
 echo '{"name": "user2"}' | http post :2000/v1/users
 ```
 
-Connect to user to each other:
+Connect user1 to user2:
 ```bash
 curl -X POST http://localhost:2000/v1/users/<user1-id>/connect?to=<user2-id>
 #or
