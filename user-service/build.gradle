@@ -1,3 +1,7 @@
+description = 'User service'
+
+mainClassName = 'microservices.sample.user.ratpack.UserServer'
+
 dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
 
