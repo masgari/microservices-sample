@@ -7,7 +7,7 @@ Ratpack based microservices sample with two service:
 `User Service` uses `Persistence Service` for persisting users. `Persistence Service` will be discovered automatically,
 there is no need to pass details to `User Service` runner.
 
-Current `Persistence Service` implementation uses `Hazelcast` as in-memory, distributed grid.
+Current `Persistence Service` implementation uses `Hazelcast` as in-memory, distributed database.
 
 
 # Building
