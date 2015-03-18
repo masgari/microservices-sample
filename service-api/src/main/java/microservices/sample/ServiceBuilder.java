@@ -21,8 +21,12 @@ public class ServiceBuilder<S> {
     }
 
     public S build(String ip, int port) {
+        return build(String.format("http://%s:%d", ip, port));
+    }
+
+    public S build(String url) {
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(String.format("http://%s:%d", ip, port))
+                .setEndpoint(url)
                 .setClient(new OkClient(new OkHttpClient()))
                 .build();
 

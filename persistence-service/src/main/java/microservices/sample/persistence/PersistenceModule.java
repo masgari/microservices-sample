@@ -29,8 +29,6 @@ public class PersistenceModule extends AbstractModule {
         bind(PersistenceHandlerFactory.class);
         bind(EntitiesCollectionHandler.class);
 
-        bind(IdGenerator.class).to(UUIDGenerator.class);
-
         HazelcastInstance hazelcastInstance = HazelcastBuilder.create().build();
 
         ServiceRegistry serviceRegistry = new HazelcastServiceRegistry(hazelcastInstance);

@@ -1,16 +1,22 @@
 package microservices.sample.user;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import microservices.sample.GenericResponse;
 import microservices.sample.IdResponse;
 import microservices.sample.persistence.PersistenceService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
+ * This class is not implemented async.
+ *
+ *
  * @author mamad
  * @since 17/03/15.
  */
@@ -30,13 +36,18 @@ public class UserStoreImpl implements UserStore {
             onErrorCallback.accept(new NullPointerException("user can not be null."));
             return;
         }
+
+        if (Strings.isNullOrEmpty(user.getId())) {
+            user = new User(user.getName(), UUID.randomUUID().toString());
+        }
+
         PersistenceService persistenceService = persistenceServiceProvider.get();
         IdResponse idResponse = persistenceService.save(user);
         onSuccessCallback.accept(IdResponse.of(idResponse.getId()));
     }
 
     @Override
-    public void connectAsync(String userId, String secondUserId, Consumer<IdResponse> onSuccessCallback, Consumer<Throwable> onErrorCallback) {
+    public void connectAsync(String userId, String secondUserId, Consumer<GenericResponse> onSuccessCallback, Consumer<Throwable> onErrorCallback) {
         PersistenceService persistenceService = persistenceServiceProvider.get();
         //todo: handle user not found (HTTP 404)
         User user = persistenceService.findById(userId);
@@ -49,7 +60,7 @@ public class UserStoreImpl implements UserStore {
         secondUser.addConnection(user.getId());
         persistenceService.save(secondUser);
 
-        onSuccessCallback.accept(IdResponse.of(userId));
+        onSuccessCallback.accept(GenericResponse.of("connected."));
     }
 
     @Override

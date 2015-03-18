@@ -5,12 +5,12 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.collect.Sets;
 import com.google.inject.Singleton;
+import microservices.sample.ServiceBuilder;
 import microservices.sample.discovery.PublishedServiceInfo;
 import microservices.sample.discovery.ServiceDiscoveryListener;
 import microservices.sample.persistence.PersistenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import retrofit.RestAdapter;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -35,10 +35,7 @@ public class AutoDiscoveryPersistenceServiceProvider implements PersistenceServi
                 @Override
                 @SuppressWarnings("unchecked")
                 public PersistenceService load(String url) throws Exception {
-                    RestAdapter restAdapter = new RestAdapter.Builder()
-                            .setEndpoint(url)
-                            .build();
-                    return restAdapter.create(PersistenceService.class);
+                    return ServiceBuilder.create(PersistenceService.class).build(url);
                 }
             };
     private final Set<PublishedServiceInfo<PersistenceService>> availableServices = Sets.newConcurrentHashSet();

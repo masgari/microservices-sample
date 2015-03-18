@@ -1,5 +1,6 @@
 package microservices.sample.user;
 
+import microservices.sample.GenericResponse;
 import microservices.sample.IdResponse;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface UserStore {
      * @param onSuccessCallback
      * @param onErrorCallback
      */
-    void connectAsync(String userId, String secondUserId, Consumer<IdResponse> onSuccessCallback, Consumer<Throwable> onErrorCallback);
+    void connectAsync(String userId, String secondUserId, Consumer<GenericResponse> onSuccessCallback, Consumer<Throwable> onErrorCallback);
 
     /**
      * Return list of users connected to the user with userId

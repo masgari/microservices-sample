@@ -23,12 +23,10 @@ public class HazelcastEntityStore implements EntityStore {
     public static final String TABLE1 = "common";
 
     private final HazelcastInstance hazelcastInstance;
-    private final IdGenerator idGenerator;
 
     @Inject
-    public HazelcastEntityStore(HazelcastInstance hazelcastInstance, IdGenerator idGenerator) {
+    public HazelcastEntityStore(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
-        this.idGenerator = idGenerator;
     }
 
     @Override
@@ -41,11 +39,12 @@ public class HazelcastEntityStore implements EntityStore {
             onErrorCallback.accept(new InvalidValueException("Only objects of type Entity are supported."));
             return;
         }
+        String id = ((Entity) object).getId();
+        if (Strings.isNullOrEmpty(id)) {
+            onErrorCallback.accept(new NullPointerException("Object id can not be null."));
+            return;
+        }
         try {
-            String id = ((Entity) object).getId();
-            if (Strings.isNullOrEmpty(id)) {
-                id = idGenerator.newId();
-            }
             IMap<Object, Object> map = getMap();
             map.put(id, object);
             onSuccessCallback.accept(IdResponse.of(id));

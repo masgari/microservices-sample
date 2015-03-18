@@ -1,5 +1,6 @@
 package microservices.sample.user;
 
+import microservices.sample.GenericResponse;
 import microservices.sample.IdResponse;
 import retrofit.http.*;
 
@@ -20,7 +21,7 @@ public interface UserService {
      * @return connection id
      */
     @POST("/v1/users/{id}/connect")
-    IdResponse connect(@Path("id") String id, @Query("to") String to);
+    GenericResponse connect(@Path("id") String id, @Query("to") String to);
 
     @GET("/v1/users/{id}/connections")
     List<User> listDirectConnection(@Path("id") String id);
