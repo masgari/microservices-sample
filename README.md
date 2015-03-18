@@ -73,6 +73,7 @@ curl http://localhost:2000/v1/users/<user1-id>/connections
 http :2000/v1/users/<user1-id>/connections
 ```
 
+See [UserServiceTest](user-service/src/integrationTest/java/microservices/sample/user/UserServiceTest.java) integration test for service usage.
 
 # Issues
 
@@ -81,12 +82,12 @@ http :2000/v1/users/<user1-id>/connections
 
 # Modules
 
-* [user-service](user-service/README.md): User service implementation
-* [persistence-service](persistence-service/README.md): Persistence service implementation
-* [service-discovery](service-discovery/README.md): Service discovery definitions
-* [hazelcast-discovery](hazelcast-discovery/README.md): Hazelcast-based service discovery implementation
-* [base-server](base-server/README.md): Helpers and base classes for building Ratpack-based micro-service
-* [service-api](service-api/README.md): Base classes and REST definitions for clients
+* [user-service](user-service): User service implementation
+* [persistence-service](persistence-service): Persistence service implementation
+* [service-discovery](service-discovery): Service discovery definitions
+* [hazelcast-discovery](hazelcast-discovery): Hazelcast-based service discovery implementation
+* [base-server](base-server): Helpers and base classes for building Ratpack-based micro-service
+* [service-api](service-api): Base classes and REST definitions for clients
 
 # Running tests
 

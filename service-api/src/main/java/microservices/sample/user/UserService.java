@@ -24,5 +24,5 @@ public interface UserService {
     GenericResponse connect(@Path("id") String id, @Query("to") String to);
 
     @GET("/v1/users/{id}/connections")
-    List<User> listDirectConnection(@Path("id") String id);
+    List<User> listDirectConnections(@Path("id") String id);
 }

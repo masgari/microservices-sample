@@ -60,7 +60,7 @@ public class UserServiceTest {
         String id2 = userService.addUser(u2).getId();
         userService.connect(id1, id2);
 
-        List<User> users = userService.listDirectConnection(id1);
+        List<User> users = userService.listDirectConnections(id1);
         assertNotNull(users);
         assertFalse(users.isEmpty());
         assertThat(users.size(), equalTo(1));
